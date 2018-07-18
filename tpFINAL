@@ -1,0 +1,78 @@
+/*CREATE DATABASE db_sanchez_gonzalo;
+USE db_sanchez_gonzalo;
+*/
+create TABLE Propietario (
+	dni bigint(10),
+	nombre varchar(50) NOT NULL,
+	apellido varchar(50) NOT NULL,
+	direccion varchar(50) NOT NULL,
+	telefono varchar(50) NOT NULL,
+	primary key(dni)
+);
+
+create TABLE Auto (
+	patente varchar(50),
+	marca varchar(50) NOT NULL,
+	modelo varchar(50) NOT NULL,
+	dniProp bigint(10) NOT NULL,
+	primary key(patente),
+	foreign key (dniProp) references Propietario (dni)
+);
+
+create TABLE Empleado (
+	dni bigint(10),
+	nombre varchar(50) NOT NULL,
+	apellido varchar(50) NOT NULL,
+	primary key(dni)
+);
+
+create TABLE Repuestos (
+	id bigint(10) auto_increment,
+	nombre varchar(50) NOT NULL,
+	cantidad int(50) NOT NULL,
+	primary key(id)
+);
+
+create TABLE Orden (
+	id bigint(10) auto_increment,
+	dniEmpleado bigint(10) NOT NULL,
+	patenteAuto varchar(50) NOT NULL,
+	estado varchar(10) NOT NULL,
+	fechaingreso datetime NOT NULL,
+	falla varchar(50) NOT NULL,
+	cantidadHoras int(50),
+	precioFinal int(50),
+	primary key(id),
+	foreign key (dniEmpleado) references Empleado (dni),
+	foreign key (patenteAuto) references Auto (patente)
+);
+
+
+create table OrdenRepuestos(
+	idOrden bigint(10),
+	idRepuestos bigint(10),
+	cantidad int(50) NOT NULL,
+	primary key (idOrden, idRepuestos),
+	foreign key (idOrden) references Orden(id),
+	foreign key (idRepuestos) references Repuestos(id)
+);
+
+INSERT INTO Propietario (dni,nombre,apellido,direccion,telefono) 
+VALUES (40009284,'Gonzalo','Sanchez','moldes 1572','1137707227');
+
+INSERT INTO Auto (patente,marca,modelo,dniProp) 
+VALUES ('NTR 939','Citroen','C3',40009284);
+
+INSERT INTO Empleado (dni,nombre,apellido) 
+VALUES ('30009583','Raul','Hernandez');
+
+INSERT INTO Repuestos (nombre,cantidad) 
+VALUES ('Bujias',5);
+
+INSERT INTO Orden(fechaingreso,estado,falla,cantidadHoras,dniEmpleado,patenteAuto,precioFinal) 
+VALUES ('2015-11-01', 'Finalizado','Luces no funcionan',10,'30009583','NTR 939',1500);
+
+INSERT INTO OrdenRepuestos VALUES (1,1,10);
+
+INSERT INTO Propietario (dni,nombre,apellido) 
+VALUES (50548961,'Francisco','Hosch');
